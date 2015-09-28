@@ -70,10 +70,10 @@ def printCommands():
 #Aliohjelma, joka tulostaa pelihahmon nykyisen huoneen kuvauksen    
 def printCharCurLocDesc():
     cur = db.cursor()
-    sql = "select description from room where id in (select room from player where id = 1);"
+    sql = "select description from room where id in (select location from player character where id = 1);"
     cur.execute(sql)
     result = cur.fetchall()
-    if cur.rowcount>=1:
+    if cur.rowcount>=1: 
         cur.execute(sql)
         for row in result:
             print(row)
@@ -82,7 +82,7 @@ def printCharCurLocDesc():
 #Aliohjelma, joka tulostaa pelihahmon nykyisessä huoneessa olevat esineet
 def printCharCurLocItems():
     cur = db.cursor()
-    sql = "select description from object where location in (select location from player where id = 1);"
+    sql = "select description from object where location in (select location from player character where id = 1);"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -94,7 +94,8 @@ def printCharCurLocItems():
 #Aliohjelma, joka muuttaa käyttäjän ottaman esineen sijainniksi pelaajan, esineen kuvaus parametrina
 def updateItemToPlayer(item):
     cur = db.cursor()
-    sql = "update object set withPlayer = true,location = null where description='"+item+"';"
+    sql = "update items set withPlayer = 1,
+    sql = "update item location = null where name from itemtypes='"+item+"';"
     cur.execute(sql)
     return
 
@@ -102,7 +103,7 @@ def updateItemToPlayer(item):
 def checkIfUserWantedItemInRoom(item):
     takenOk=False;
     cur = db.cursor()
-    sql = "select description from object where location in (select location from player where id =1);"
+    sql = "select description from itemtypes where location in (select location from player where id =1);"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -115,7 +116,7 @@ def checkIfUserWantedItemInRoom(item):
 #Aliohjelma, joka tulostaa pelihahmon kantamat esineet
 def printItemsWithPlayer():
     cur = db.cursor()
-    sql = "select description from object where withPlayer=true;"
+    sql = "select description from items where withPlayer=1;"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -128,7 +129,7 @@ def printItemsWithPlayer():
 def checkIfUserHaveItem(item):
     dropOk=False;
     cur = db.cursor()
-    sql = "select withPlayer from object where description='"+item+"';"
+    sql = "select withPlayer from items where description='"+item+"';"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -138,13 +139,6 @@ def checkIfUserHaveItem(item):
                 dropOk=True
     return dropOk
 
-
-#Aliohjelma, joka muuttaa eastOpen arvon auki sillan ja linnanpihan välissä
-def openDoorFromBridgeToCasteYard():
-     cur = db.cursor()
-     sql = "update map set eastOpen = 1 where curRoom = 2;"
-     cur.execute(sql)
-     print("You can move to castle yard")
 
 #Aliohjelma, joka pudottaa esineen pelaajalta huoneeseen missä pelaaja on:
 #Erkoistapaus, jos esine on peikolle annettava kultakolikko, niin se pudotetaan huoneeseen "Trash"
@@ -202,10 +196,16 @@ def directionPossibleIfYesMove(direction):
     #huomio peikko sillalla ja avain linnan oveen
     #huomio että peikko on sillalla vain ensimmäisellä kerralla
     moveOk = False
-    if direction == "east" and checkIfPlayerAtBridge()== True and roomOpenInDirection(direction) == 0:
-        print("I'am horrible troll and I will not allow you to keep going on.")
-        print("I smell that you have some gold.")
-        print("Give it to ME")
+    if direction == "east" and roomOpenInDirection(direction) == 0:
+    elif direction == "west" and roomOpenInDirection(direction) == 0:
+    elif direction == "north" and roomOpenInDirection(direction) == 0:
+    elif direction == "south" and roomOpenInDirection(direction) == 0:
+    elif direction == "noertheast" and roomOpenInDirection(direction) == 0:
+    elif direction == "southeast" and roomOpenInDirection(direction) == 0:
+    elif direction == "southwest" and roomOpenInDirection(direction) == 0:
+    elif direction == "northwest" and roomOpenInDirection(direction) == 0:
+    elif direction == "up" and roomOpenInDirection(direction) == 0:
+    elif direction == "down" and roomOpenInDirection(direction) == 0:
     #else if linnan ovi
     #Päivitetään pelaajan uusi sijainti
     elif roomInDirection(direction) != "null" and roomOpenInDirection(direction) == 1:
@@ -228,10 +228,10 @@ if item == "lantern":
 #PÄÄOHJELMA ALKAA
 
 # Tietokantayhteyden nuodostaminen
-db = mysql.connector.connect(host="127.0.0.1",
-                            user="puush",
+db = mysql.connector.connect(host="local",
+                            user="?",
                             passwd="salasanasi",
-                            db="puush",
+                            db="gravehill",
                             buffered=True)
 #db.autocommit=False;
 StartingScreen()
@@ -264,9 +264,8 @@ while (end != "quit"):
             printCommands()
         elif com == "quit" or com == "q":
             end="quit"
-        elif com == "look":
-          print("Items:")
-          printCharCurLocItems()
+        elif com == "examine":
+            printCharCurLocItems()
         elif com == "take":
             #Tarkistetaan että käskyssä annettu esine on huoneessa; Jos on, otetaan se
             if checkIfUserWantedItemInRoom(item) == True:
@@ -277,7 +276,7 @@ while (end != "quit"):
         elif com == "inventory":
             print("Player Items:")
             printItemsWithPlayer()
-        elif com == "ope":
+        elif com == "open":
                 openDoor()
         elif com == "drop":
             #Tarkistetaan että käskyssä annettu esine on pelaajalla; Jos on, pudotetaan se
@@ -285,7 +284,7 @@ while (end != "quit"):
                     dropItemToCurRoom(item)
             else:
                 print(item+" can not be dropped, because you dont have it")
-        elif com == "east" or com == "e" or com == "west" or com == "w" or com == "north" or com == "n" or com == "south" or com == "s":
+        elif com == "east" or com == "e" or com == "west" or com == "w" or com == "north" or com == "n" or com == "south" or com == "s" com == "down" or com == "d" or com == "up" or com == "u" or com == "northeast" or com == "nw" or com == "southeast" or com == "se" or com == 
             if com=="e":
                 com = "east";
             if com=="w":
@@ -294,6 +293,11 @@ while (end != "quit"):
                 com = "north";
             if com=="s":
                 com = "south";
+            if com=="d":
+                com = "down";
+            if com=="u":
+                com = "up";
+          
             if directionPossibleIfYesMove(com) == True:
                 print("Your new room")
                 printCharCurLocDesc()
