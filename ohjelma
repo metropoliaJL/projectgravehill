@@ -1,0 +1,311 @@
+import mysql.connector
+#ALIOHJELMIA
+
+# Aliohjelma, joka tulostaa aloitusnäytön
+def StartingScreen():
+    print(" ██▓███   ██▀███   ▒█████   ▄▄▄██▀▀▀▓█████  ▄████▄  ▄▄▄█████▓     ▄████  ██▀███   ▄▄▄    ██▒   █▓▓█████  ██░ ██  ██▓ ██▓     ██▓")  
+    print("▓██░  ██▒▓██ ▒ ██▒▒██▒  ██▒   ▒██   ▓█   ▀ ▒██▀ ▀█  ▓  ██▒ ▓▒    ██▒ ▀█▒▓██ ▒ ██▒▒████▄ ▓██░   █▒▓█   ▀ ▓██░ ██▒▓██▒▓██▒    ▓██▒")    
+    print("▓██░ ██▓▒▓██ ░▄█ ▒▒██░  ██▒   ░██   ▒███   ▒▓█    ▄ ▒ ▓██░ ▒░   ▒██░▄▄▄░▓██ ░▄█ ▒▒██  ▀█▄▓██  █▒░▒███   ▒██▀▀██░▒██▒▒██░    ▒██░")    
+    print("▒██▄█▓▒ ▒▒██▀▀█▄  ▒██   ██░▓██▄██▓  ▒▓█  ▄ ▒▓▓▄ ▄██▒░ ▓██▓ ░    ░▓█  ██▓▒██▀▀█▄  ░██▄▄▄▄██▒██ █░░▒▓█  ▄ ░▓█ ░██ ░██░▒██░    ▒██░")    
+    print("▒██▒ ░  ░░██▓ ▒██▒░ ████▓▒░ ▓███▒   ░▒████▒▒ ▓███▀ ░  ▒██▒ ░    ░▒▓███▀▒░██▓ ▒██▒ ▓█   ▓██▒▒▀█░  ░▒████▒░▓█▒░██▓░██░░██████▒░██████▒")
+    print("▒▓▒░ ░  ░░ ▒▓ ░▒▓░░ ▒░▒░▒░  ▒▓▒▒░   ░░ ▒░ ░░ ░▒ ▒  ░  ▒ ░░       ░▒   ▒ ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░░ ▐░  ░░ ▒░ ░ ▒ ░░▒░▒░▓  ░ ▒░▓  ░░ ▒░▓  ░")
+    print("░▒ ░       ░▒ ░ ▒░  ░ ▒ ▒░  ▒ ░▒░    ░ ░  ░  ░  ▒       ░         ░   ░   ░▒ ░ ▒░  ▒   ▒▒ ░░ ░░   ░ ░  ░ ▒ ░▒░ ░ ▒ ░░ ░ ▒  ░░ ░ ▒  ░")
+    print("░░         ░░   ░ ░ ░ ░ ▒   ░ ░ ░      ░   ░          ░         ░ ░   ░   ░░   ░   ░   ▒     ░░     ░    ░  ░░ ░ ▒ ░  ░ ░     ░ ░   ")   
+    print("░         ░ ░   ░   ░      ░  ░░ ░                        ░    ░           ░  ░   ░     ░  ░ ░  ░  ░ ░      ░  ░    ░  ░")
+    print("                                       ░                                                 ░                                ")      
+    x = input("Type "enter" to begin your journey ")
+        while x != enter:
+            print("Are you scared? Please try again")
+            x = input ("Type "enter" to begin your journey ")
+        else:
+            print("Good luck. You will need it")
+    return
+
+# Aliohjelma joka tulostaa juonikuvauksen
+def printStoryDesc():
+    print("STORY SO FAR")
+    print(" Samuel Blackwater has always been interested in strange tales and urban legends. He is a former")
+    print("professor of folkloristics in the Royal university of Southern Scotland. Recently he has been")
+    print("studying the rumors about the Castle of Gravehill and he decides to meet the last heir of the")
+    print("Gravehill family. Weeks pass and nothing is heard from the professor but since he didn't tell anyone")
+    print("about his expedition no one is concerned of his wellbeing. ")
+    print("")
+    print(" One day Howard Blackwater receives a letter from his only living relative Uncle Samuel")
+    print("Blackwater. ”Hello my dearest nephew. If you are reading this letter and you have heard nothing of")
+    print("me past four weeks I am in grave danger. I have been investigating the strange rumors regarding")
+    print("the  Castle of Gravehill. The family of Gravehills has always been in the center of rumors around")
+    print("that area. But I don't believe these are just rumors. I am quite sure there are some really dark and")
+    print("evil things happening in the castle and I will find out what. Howard, you are my only hope please")
+    print("help me.” Afraid but twistedly intrigued Howard departs for the Castle of Gravehill.")
+          
+    
+#Aliohjelma, joka tulostaa listan käytössä olevista komennoista
+def printCommands():
+    print("COMMANDS")
+    print("commands - print list of commands")
+    print("go north - alias n - moves game character")
+    print("go souht - alias s - moves game character")
+    print("go east - alias e - moves game character")
+    print("go west - alias w - moves game character")
+    print("go up - alias u - moves game character")
+    print("go down - alias d - moves game character")
+    print("take  - alias get - get item to game character")
+    print("drop -  drop item to room")
+    print("examine - describes the current room")
+    print("inventory - shows my items")
+    print("open door - open door ")
+    print("close door - close door")
+    print("drink 'item' - drinks the item if possible")
+    print("eat 'item' - eats the item if possible")
+    print("pray - prays the Old Ones for power and salvation")
+    print("break 'object' with 'item' - breaks the object with item if possible)
+    print("dig - digs around the player character")
+    print("attack with 'item' - attacks monster in current location")
+    print("reload 'weapon' - reloads the weapon")
+    print("run north/south/west/east - runs away form monter to selected direction")
+    print("quit - alias q - lopetuskäsky")
+    print("\n")
+    return
+
+#Aliohjelma, joka tulostaa pelihahmon nykyisen huoneen kuvauksen    
+def printCharCurLocDesc():
+    cur = db.cursor()
+    sql = "select description from room where id in (select room from player where id = 1);"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            print(row)
+    return
+
+#Aliohjelma, joka tulostaa pelihahmon nykyisessä huoneessa olevat esineet
+def printCharCurLocItems():
+    cur = db.cursor()
+    sql = "select description from object where location in (select location from player where id = 1);"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            print(row)
+    return
+
+#Aliohjelma, joka muuttaa käyttäjän ottaman esineen sijainniksi pelaajan, esineen kuvaus parametrina
+def updateItemToPlayer(item):
+    cur = db.cursor()
+    sql = "update object set withPlayer = true,location = null where description='"+item+"';"
+    cur.execute(sql)
+    return
+
+#Aliohjelma, joka tarkistaa että käyttäjälle voidaan tulostaa esine otetuksi, esine parametrina
+def checkIfUserWantedItemInRoom(item):
+    takenOk=False;
+    cur = db.cursor()
+    sql = "select description from object where location in (select location from player where id =1);"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            if row[0]==item:
+                takenOk=True
+    return takenOk
+    
+#Aliohjelma, joka tulostaa pelihahmon kantamat esineet
+def printItemsWithPlayer():
+    cur = db.cursor()
+    sql = "select description from object where withPlayer=true;"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            print(row)
+    return
+
+#Aliohjelma, joka tarkistaa että pelaajalla on esine, minkä hän haluaa pudottaa, esine parametrina
+def checkIfUserHaveItem(item):
+    dropOk=False;
+    cur = db.cursor()
+    sql = "select withPlayer from object where description='"+item+"';"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            if row[0]==1:
+                dropOk=True
+    return dropOk
+
+
+#Aliohjelma, joka muuttaa eastOpen arvon auki sillan ja linnanpihan välissä
+def openDoorFromBridgeToCasteYard():
+     cur = db.cursor()
+     sql = "update map set eastOpen = 1 where curRoom = 2;"
+     cur.execute(sql)
+     print("You can move to castle yard")
+
+#Aliohjelma, joka pudottaa esineen pelaajalta huoneeseen missä pelaaja on:
+#Erkoistapaus, jos esine on peikolle annettava kultakolikko, niin se pudotetaan huoneeseen "Trash"
+def dropItemToCurRoom(item):
+    cur = db.cursor()
+    if item == "gold coin" and checkIfPlayerAtBridge()== True:
+        sql = "update object set withPlayer = false, location=8 where description = 'gold coin';"
+        cur.execute(sql)
+        print("You drop gold coin, now Troll have it. You cannot get it back")
+        #Muutetaan tietokantaan suunta auki
+        openDoorFromBridgeToCasteYard()
+    else:
+        sql = "update object set withPlayer = false, location = (select location from player where id=1)where description='"+item+"';"
+        cur.execute(sql)
+        print("You dropped "+item)
+    return
+def roomInDirection(direction):
+    cur = db.cursor()
+    sql = "select "+direction+" from map where curRoom in (select location from player where id = 1)"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            roomDirection = row[0]
+    return roomDirection
+    
+def roomOpenInDirection(direction):
+
+    cur = db.cursor()
+    sql = "select "+direction+"Open from map where curRoom in (select location from player where id = 1)"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            roomDirectionOpen = row[0]
+    return roomDirectionOpen
+
+#Aliohjelma, joka avaa oven
+def openDoor():
+    #Tarkasteaan että pelaajalla on avain
+    #Muutetaan ovi auki map-taulussa
+    cur = db.cursor()
+    if checkIfUserHaveItem("key") == True:
+        sql = "update map set eastOpen = true where id = 3;"
+        cur.execute(sql)
+        print("Door is open now")
+    else:
+        print("You can not open door without key")
+   
+        
+def directionPossibleIfYesMove(direction):
+    #tsekkaa onko huone ko.suunnassa
+    #huomio peikko sillalla ja avain linnan oveen
+    #huomio että peikko on sillalla vain ensimmäisellä kerralla
+    moveOk = False
+    if direction == "east" and checkIfPlayerAtBridge()== True and roomOpenInDirection(direction) == 0:
+        print("I'am horrible troll and I will not allow you to keep going on.")
+        print("I smell that you have some gold.")
+        print("Give it to ME")
+    #else if linnan ovi
+    #Päivitetään pelaajan uusi sijainti
+    elif roomInDirection(direction) != "null" and roomOpenInDirection(direction) == 1:
+        cur = db.cursor()
+        sql = "update player set location = "+str(roomInDirection(direction))+" where id=1;"
+        cur.execute(sql)
+        moveOk = True
+    return moveOk
+
+#Aliohjelma ,joka tarkistaa onko huoneessa pimeää
+def IsRoomDark():
+LightOn = False
+cur = db.cursor()
+if item == "lantern":
+    sql = "update room set light = 1 where ID in (select location from (player);"
+    
+
+
+
+#PÄÄOHJELMA ALKAA
+
+# Tietokantayhteyden nuodostaminen
+db = mysql.connector.connect(host="127.0.0.1",
+                            user="puush",
+                            passwd="salasanasi",
+                            db="puush",
+                            buffered=True)
+#db.autocommit=False;
+StartingScreen()
+printStroryDesc()
+printCommands()
+print("Welcome to play!\n")
+end = "temp"
+
+while (end != "quit"):
+    print("You are on the:")
+    printCharCurLocDesc()
+    com="temp"
+    #while-silmukka, missä pyöritään kunnes käyttäjä antaa lopetuskäskyn
+    while(end!="quit"):
+        command = input("Your command?")
+        if command=="":
+            print("Whatever")
+        else:
+            #Tehdään komennosta lista esim. "take key", listan ensimmäinen alkio on "take" ja toinen alkio on "key"
+            comList = command.split()
+            #Otetaan com muuttujaan listan ensimmäinen arvo
+            com = comList[0];
+            #comList listasta poistetaan eka alkio
+            del comList[0]
+            #item muuttujan arvoksi tulee comList listasta merkkijonoksi muutettu merkkijono
+            item = " ".join(str(x)for x in comList)
+            
+        #if-rakenne, missä käydään kaikki komennot läpi
+        if com == "commands":
+            printCommands()
+        elif com == "quit" or com == "q":
+            end="quit"
+        elif com == "look":
+          print("Items:")
+          printCharCurLocItems()
+        elif com == "take":
+            #Tarkistetaan että käskyssä annettu esine on huoneessa; Jos on, otetaan se
+            if checkIfUserWantedItemInRoom(item) == True:
+                updateItemToPlayer(item)
+                print(item+" taken")
+            else:
+                print(item+" can not be taken, because it is not in the room")
+        elif com == "inventory":
+            print("Player Items:")
+            printItemsWithPlayer()
+        elif com == "ope":
+                openDoor()
+        elif com == "drop":
+            #Tarkistetaan että käskyssä annettu esine on pelaajalla; Jos on, pudotetaan se
+            if checkIfUserHaveItem(item) == True:
+                    dropItemToCurRoom(item)
+            else:
+                print(item+" can not be dropped, because you dont have it")
+        elif com == "east" or com == "e" or com == "west" or com == "w" or com == "north" or com == "n" or com == "south" or com == "s":
+            if com=="e":
+                com = "east";
+            if com=="w":
+                com = "west";
+            if com=="n":
+                com = "north";
+            if com=="s":
+                com = "south";
+            if directionPossibleIfYesMove(com) == True:
+                print("Your new room")
+                printCharCurLocDesc()
+            else:
+                print("You cannot move to that direction")
+            
+        else:
+          print("I did not understand, please try again")  
+           
+
+# Perutaan tietokantaan tehdyt muutokset
+db.rollback()
+#suljetaan tietokanta yhteys
+db.close()
+print("Thank You for playing, se you soon, by!")
