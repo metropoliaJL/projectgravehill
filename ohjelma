@@ -14,7 +14,7 @@ def StartingScreen():
     print("░         ░ ░   ░   ░      ░  ░░ ░                        ░    ░           ░  ░   ░     ░  ░ ░  ░  ░ ░      ░  ░    ░  ░")
     print("                                       ░                                                 ░                                ")      
     x = input("Type 'enter' to begin your journey ")
-    while (x != enter):
+    while (x != "enter"):
         print("Are you scared? Please try again")
         x = input ("Type 'enter' to begin your journey ")
     print("Good luck. You will need it")
@@ -69,7 +69,7 @@ def printCommands():
 #Aliohjelma, joka tulostaa pelihahmon nykyisen huoneen kuvauksen    
 def printCharCurLocDesc():
     cur = db.cursor()
-    sql = "select description from room where id in (select location from player character where id = 1);"
+    sql = "select description from room where ID in (select location from playercharacter where ID = 1);"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1: 
@@ -81,13 +81,13 @@ def printCharCurLocDesc():
 #Aliohjelma, joka tulostaa pelihahmon nykyisessä huoneessa olevat esineet
 def printCharCurLocItems():
     cur = db.cursor()
-    sql = "select description from object where location in (select location from player character where id = 1);"
+    sql = "select description from object where location in (select location from playercharacter where id = 1);"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
         cur.execute(sql)
         for row in result:
-            print(row)
+            print (row)
     return
 
 #Aliohjelma, joka muuttaa käyttäjän ottaman esineen sijainniksi pelaajan, esineen kuvaus parametrina
@@ -102,7 +102,7 @@ def updateItemToPlayer(item):
 def checkIfUserWantedItemInRoom(item):
     takenOk=False;
     cur = db.cursor()
-    sql = "select description from itemtypes where location in (select location from player where id =1);"
+    sql = "select description from itemtypes where location in (select location from playercharacter where id =1);"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -150,13 +150,13 @@ def dropItemToCurRoom(item):
         #Muutetaan tietokantaan suunta auki
         openDoorFromBridgeToCasteYard()
     else:
-        sql = "update object set withPlayer = false, location = (select location from player where id=1)where description='"+item+"';"
+        sql = "update object set withPlayer = false, location = (select location from playercharacter where id=1)where description='"+item+"';"
         cur.execute(sql)
         print("You dropped "+item)
     return
 def roomInDirection(direction):
     cur = db.cursor()
-    sql = "select "+direction+" from map where curRoom in (select location from player where id = 1)"
+    sql = "select "+direction+" from map where curRoom in (select location from playercharacter where id = 1)"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -168,7 +168,7 @@ def roomInDirection(direction):
 def roomOpenInDirection(direction):
 
     cur = db.cursor()
-    sql = "select "+direction+"Open from map where curRoom in (select location from player where id = 1)"
+    sql = "select "+direction+"Open from map where curRoom in (select location from playercharacter where id = 1)"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -219,37 +219,56 @@ def directionPossibleIfYesMove(direction):
     #Päivitetään pelaajan uusi sijainti
     elif roomInDirection(direction) != "null" and roomOpenInDirection(direction) == 1:
         cur = db.cursor()
-        sql = "update player set location = "+str(roomInDirection(direction))+" where id=1;"
+        sql = "update playercharacter set location = "+str(roomInDirection(direction))+" where id=1;"
         cur.execute(sql)
         moveOk = True
     return moveOk
 
+#Aliohjelma joka tulostaa huoneen nimen missä pelaaja sijaitsee
+
+def printCharCurLocName():
+    cur = db.cursor()
+    sql = "select name from room where ID in (select location from playercharacter where ID = 1);"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1: 
+        cur.execute(sql)
+        for row in result:
+            print(row)
+    return
 
 
 
-
+    
 #PÄÄOHJELMA ALKAA
 
 # Tietokantayhteyden nuodostaminen
-db = mysql.connector.connect(host="local",
-                            user="rainer",
-                            passwd="Ironmaiden28995",
+db = mysql.connector.connect(host="127.0.0.1",
+                            user="root",
+                            passwd="metropolia",
                             db="gravehill",
                             buffered=True)
 #db.autocommit=False;
 StartingScreen()
-printStroryDesc()
+printStoryDesc()
+x = input("Type 'c' to continue ")
+while (x != "c"):
+    print("Please try again")
+    x = input ("Type 'c' to continue ")
+print("\n")
 printCommands()
 print("Welcome to play!\n")
 end = "temp"
 
 while (end != "quit"):
-    print("You are on the:")
+    print("You are on the: ")
+    printCharCurLocName()
+    print("\n")
     printCharCurLocDesc()
     com="temp"
     #while-silmukka, missä pyöritään kunnes käyttäjä antaa lopetuskäskyn
     while(end!="quit"):
-        command = input("Your command?")
+        command = input("What would you like to do? ")
         if command=="":
             print("Whatever")
         else:
@@ -268,7 +287,7 @@ while (end != "quit"):
         elif com == "quit" or com == "q":
             end="quit"
         elif com == "examine":
-            printCharCurLocItems()
+            printCharCurLocDesc()
         elif com == "take":
             #Tarkistetaan että käskyssä annettu esine on huoneessa; Jos on, otetaan se
             if checkIfUserWantedItemInRoom(item) == True:
@@ -310,7 +329,9 @@ while (end != "quit"):
                 com = "northwest";
           
             if directionPossibleIfYesMove(com) == True:
-                print("Your new room")
+                print("Your new room is: ")
+                printCharCurLocName()
+                print("\n")
                 printCharCurLocDesc()
             else:
                 print("You cannot move to that direction")
