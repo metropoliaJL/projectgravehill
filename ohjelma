@@ -1,4 +1,7 @@
+
 import mysql.connector
+import random
+import time
 #ALIOHJELMIA
 
 # Aliohjelma, joka tulostaa aloitusnäytön
@@ -22,20 +25,33 @@ def StartingScreen():
 
 # Aliohjelma joka tulostaa juonikuvauksen
 def printStoryDesc():
-    print("STORY SO FAR")
+    print("STORY SO FAR...")
+    time.sleep(2)
     print(" Samuel Blackwater has always been interested in strange tales and urban legends. He is a former")
+    time.sleep(1)
     print("professor of folkloristics in the Royal university of Southern Scotland. Recently he has been")
+    time.sleep(1)
     print("studying the rumors about the Castle of Gravehill and he decides to meet the last heir of the")
+    time.sleep(1)
     print("Gravehill family. Weeks pass and nothing is heard from the professor but since he didn't tell anyone")
+    time.sleep(1)
     print("about his expedition no one is concerned of his wellbeing. ")
     print("")
+    time.sleep(1)
     print(" One day Howard Blackwater receives a letter from his only living relative Uncle Samuel")
+    time.sleep(1)
     print("Blackwater. ”Hello my dearest nephew. If you are reading this letter and you have heard nothing of")
+    time.sleep(1)
     print("me past four weeks I am in grave danger. I have been investigating the strange rumors regarding")
+    time.sleep(1)
     print("the  Castle of Gravehill. The family of Gravehills has always been in the center of rumors around")
+    time.sleep(1)
     print("that area. But I don't believe these are just rumors. I am quite sure there are some really dark and")
+    time.sleep(1)
     print("evil things happening in the castle and I will find out what. Howard, you are my only hope please")
+    time.sleep(1)
     print("help me.” Afraid but twistedly intrigued Howard departs for the Castle of Gravehill.")
+    time.sleep(2)
           
     
 #Aliohjelma, joka tulostaa listan käytössä olevista komennoista
@@ -62,7 +78,7 @@ def printCommands():
     print("attack with 'item' - attacks monster in current location")
     print("reload 'weapon' - reloads the weapon")
     print("run north/south/west/east - runs away form monter to selected direction")
-    print("quit - alias q - lopetuskäsky")
+    print("quit - alias q - quits the game")
     print("\n")
     return
 
@@ -75,7 +91,7 @@ def printCharCurLocDesc():
     if cur.rowcount>=1: 
         cur.execute(sql)
         for row in result:
-            print(row)
+            print("%s"%(row))
     return
 
 #Aliohjelma, joka tulostaa pelihahmon nykyisessä huoneessa olevat esineet
@@ -93,16 +109,18 @@ def printCharCurLocItems():
 #Aliohjelma, joka muuttaa käyttäjän ottaman esineen sijainniksi pelaajan, esineen kuvaus parametrina
 def updateItemToPlayer(item):
     cur = db.cursor()
-    sql = "update items set withPlayer = 1;"
-    sql = "update item location = null where name from itemtypes='"+item+"';"
+    sql = "update items inner join itemtypes on items.itemtype=itemtypes.ID set withPlayer = 1 where name='"+item+"';"
     cur.execute(sql)
+    sql = "update items inner join itemtypes on items.itemtype=itemtypes.ID set location = null where name='"+item+"';"
+    cur.execute(sql)
+    print(item+" taken")
     return
 
 #Aliohjelma, joka tarkistaa että käyttäjälle voidaan tulostaa esine otetuksi, esine parametrina
 def checkIfUserWantedItemInRoom(item):
     takenOk=False;
     cur = db.cursor()
-    sql = "select description from itemtypes where location in (select location from playercharacter where id =1);"
+    sql = "select name from itemtypes inner join items on itemtypes.ID=items.itemtype where location in (select location from playercharacter where id =1);"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -115,20 +133,20 @@ def checkIfUserWantedItemInRoom(item):
 #Aliohjelma, joka tulostaa pelihahmon kantamat esineet
 def printItemsWithPlayer():
     cur = db.cursor()
-    sql = "select name from itemtypes where withPlayer in (select withPlayer from items where withPlayer=1);"
+    sql = "select itemtypes.name from items inner join itemtypes on items.itemtype=itemtypes.ID where withPlayer=1;"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
         cur.execute(sql)
         for row in result:
-            print(row)
+            print("-%s"%(row))
     return
 
 #Aliohjelma, joka tarkistaa että pelaajalla on esine, minkä hän haluaa pudottaa, esine parametrina
 def checkIfUserHaveItem(item):
     dropOk=False;
     cur = db.cursor()
-    sql = "select withPlayer from items where description='"+item+"';"
+    sql = "select withPlayer from items inner join itemtypes on items.itemtype=itemtypes.ID where name='"+item+"';"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -169,20 +187,13 @@ def checkRoomLight2():
     
 
 #Aliohjelma, joka pudottaa esineen pelaajalta huoneeseen missä pelaaja on:
-#Erkoistapaus, jos esine on peikolle annettava kultakolikko, niin se pudotetaan huoneeseen "Trash"
 def dropItemToCurRoom(item):
     cur = db.cursor()
-    if item == "gold coin" and checkIfPlayerAtBridge()== True:
-        sql = "update object set withPlayer = false, location=8 where description = 'gold coin';"
-        cur.execute(sql)
-        print("You drop gold coin, now Troll have it. You cannot get it back")
-        #Muutetaan tietokantaan suunta auki
-        openDoorFromBridgeToCasteYard()
-    else:
-        sql = "update object set withPlayer = false, location = (select location from playercharacter where id=1)where description='"+item+"';"
-        cur.execute(sql)
-        print("You dropped "+item)
+    sql = "update items inner join itemtypes on items.itemtype=itemtypes.ID set withPlayer = 0, location = (select location from playercharacter where id=1) where itemtypes.name='"+item+"';"
+    cur.execute(sql)
+    print("You dropped "+item.lower())
     return
+
 def roomInDirection(direction):
     cur = db.cursor()
     sql = "select "+direction+" from map where curRoom in (select location from playercharacter where id = 1)"
@@ -263,7 +274,7 @@ def printCharCurLocName():
     if cur.rowcount>=1: 
         cur.execute(sql)
         for row in result:
-            print(row)
+            print("%s"%(row))
     return
 
 
@@ -273,8 +284,8 @@ def printCharCurLocName():
 
 # Tietokantayhteyden nuodostaminen
 db = mysql.connector.connect(host="127.0.0.1",
-                            user="root",
-                            passwd="metropolia",
+                            user="Rainer",
+                            passwd="Ironmaiden28995",
                             db="gravehill",
                             buffered=True)
 #db.autocommit=False;
@@ -285,8 +296,9 @@ while (x != "c"):
     print("Please try again")
     x = input ("Type 'c' to continue ")
 print("\n")
-printCommands()
-print("Welcome to play!\n")
+#printCommands()
+print("Welcome to the Castle Gravehill!\n")
+time.sleep(1)
 end = "temp"
 
 while (end != "quit"):
@@ -309,7 +321,7 @@ while (end != "quit"):
             #comList listasta poistetaan eka alkio
             del comList[0]
             #item muuttujan arvoksi tulee comList listasta merkkijonoksi muutettu merkkijono
-            item = " ".join(str(x)for x in comList)
+            item = " ".join(str(x)for x in comList).title()
             
         #if-rakenne, missä käydään kaikki komennot läpi
         if com == "commands":
@@ -322,7 +334,6 @@ while (end != "quit"):
             #Tarkistetaan että käskyssä annettu esine on huoneessa; Jos on, otetaan se
             if checkIfUserWantedItemInRoom(item) == True:
                 updateItemToPlayer(item)
-                print(item+" taken")
             else:
                 print(item+" can not be taken, because it is not in the room")
         elif com == "inventory":
@@ -335,7 +346,7 @@ while (end != "quit"):
             if checkIfUserHaveItem(item) == True:
                     dropItemToCurRoom(item)
             else:
-                print(item+" can not be dropped, because you dont have it")
+                print("You don't have such item.")
         elif com == "east" or com == "e" or com == "west" or com == "w" or com == "north" or com == "n" or com == "south" or com == "s" or com == "down" or com == "d" or com == "up" or com == "u" or com == "northeast" or com == "ne" or com == "southeast" or com == "se" or com == "southwest" or com == "sw" or com == "northwest" or com== "nw": 
             if com=="e":
                 com = "east";
@@ -374,5 +385,10 @@ while (end != "quit"):
 db.rollback()
 #suljetaan tietokanta yhteys
 db.close()
-print("Thank You for playing, se you soon, by!")
+print("I will see you in your nightmares",end="")
+for x in range (0,6):
+    time.sleep(0.7)
+    print(".",end="")
+time.sleep(2)
+print("\nBYE!")
 
