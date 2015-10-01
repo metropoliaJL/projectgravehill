@@ -115,7 +115,7 @@ def checkIfUserWantedItemInRoom(item):
 #Aliohjelma, joka tulostaa pelihahmon kantamat esineet
 def printItemsWithPlayer():
     cur = db.cursor()
-    sql = "select description from items where withPlayer=1;"
+    sql = "select name from itemtypes where withPlayer in (select withPlayer from items where withPlayer=1);"
     cur.execute(sql)
     result = cur.fetchall()
     if cur.rowcount>=1:
@@ -138,6 +138,35 @@ def checkIfUserHaveItem(item):
                 dropOk=True
     return dropOk
 
+#Aliohjelma, joka tarkistaa onko huoneessa valoa
+def checkRoomLight():
+    LightOn = True;
+    cur = db.cursor()
+    sql = "select light from room where ID in (select location from playercharacter where ID = 1);"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount == 1:
+        LightOn=True
+    else:
+        LightOn=False         
+    return LightOn
+
+def checkRoomLight2():
+    LightOn=False;
+    cur = db.cursor()
+    sql = "select light from room where ID in (select location from playercharacter where ID = 1);"
+    cur.execute(sql)
+    result = cur.fetchall()
+    if cur.rowcount>=1:
+        cur.execute(sql)
+        for row in result:
+            if row[0]==1:
+                LightOn=True
+    else:
+        LightOn=False
+    return LightOn
+        
+    
 
 #Aliohjelma, joka pudottaa esineen pelaajalta huoneeseen missä pelaaja on:
 #Erkoistapaus, jos esine on peikolle annettava kultakolikko, niin se pudotetaan huoneeseen "Trash"
@@ -264,7 +293,8 @@ while (end != "quit"):
     print("You are on the: ")
     printCharCurLocName()
     print("\n")
-    printCharCurLocDesc()
+    if checkRoomLight2() == True:
+        printCharCurLocDesc()
     com="temp"
     #while-silmukka, missä pyöritään kunnes käyttäjä antaa lopetuskäskyn
     while(end!="quit"):
@@ -345,3 +375,4 @@ db.rollback()
 #suljetaan tietokanta yhteys
 db.close()
 print("Thank You for playing, se you soon, by!")
+
